@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checking de Actividades</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px 20px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 28px;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .header p {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        .content {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 20px;
+            padding: 30px;
+            min-height: 500px;
+        }
+
+        .sidebar {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 20px;
+            height: fit-content;
+            border: 1px solid #e9ecef;
+        }
+
+        .sidebar h3 {
+            font-size: 14px;
+            text-transform: uppercase;
+            color: #667eea;
+            margin-bottom: 12px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        .sidebar ul {
+            list-style: none;
+        }
+
+        .sidebar li {
+            margin-bottom: 8px;
+        }
+
+        .sidebar button {
+            width: 100%;
+            padding: 10px 12px;
+            background: white;
+            border: 1px solid #dee2e6;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 13px;
+            color: #495057;
+            transition: all 0.3s ease;
+            text-align: left;
+            font-weight: 500;
+        }
+
+        .sidebar button:hover {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+            transform: translateX(4px);
+        }
+
+        .sidebar button.active {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+
+        .main-content {
+            background: white;
+        }
+
+        .section-title {
+            font-size: 18px;
+            color: #212529;
+            margin-bottom: 20px;
+            font-weight: 600;
+            padding-bottom: 12px;
+            border-bottom: 2px solid #667eea;
+        }
+
+        .items-list {
+            display: grid;
+            gap: 12px;
+        }
+
+        .item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 14px 16px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border: 1px solid #e9ecef;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .item:hover {
+            background: #f0f3ff;
+            border-color: #667eea;
+            box-shadow: 0 2px 8px rgba(102, 126, 234, 0.1);
+        }
+
+        .item input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+            accent-color: #667eea;
+        }
+
+        .item label {
+            flex: 1;
+            cursor: pointer;
+            font-size: 14px;
+            color: #212529;
+            font-weight: 500;
+            user-select: none;
+        }
+
+        .item input[type="checkbox"]:checked + label {
+            color: #6c757d;
+            text-decoration: line-through;
+        }
+
+        .item.completed {
+            background: #e7f5e7;
+            border-color: #28a745;
+            opacity: 0.8;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 4px 10px;
+            background: #e7f5e7;
+            color: #28a745;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-left: auto;
+        }
+
+        .item.completed .status-badge {
+            display: inline-block;
+        }
+
+        .sidebar button.completed {
+            background: #e7f5e7;
+            color: #28a745;
+            border-color: #28a745;
+            font-weight: 600;
+        }
+
+        .sidebar button.completed:hover {
+            background: #28a745;
+            color: white;
+        }
+
+        .actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid #e9ecef;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 10px 16px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .btn-reset {
+            background: #f8f9fa;
+            color: #667eea;
+            border: 1px solid #667eea;
+        }
+
+        .btn-reset:hover {
+            background: #667eea;
+            color: white;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: #6c757d;
+        }
+
+        .empty-state svg {
+            width: 60px;
+            height: 60px;
+            margin-bottom: 16px;
+            opacity: 0.5;
+        }
+
+        @media (max-width: 768px) {
+            .content {
+                grid-template-columns: 1fr;
+                padding: 20px;
+            }
+
+            .sidebar {
+                display: grid;
+                grid-template-columns: repeat(2, 1fr);
+                height: auto;
+                gap: 8px;
+            }
+
+            .sidebar ul {
+                grid-column: span 2;
+                display: grid;
+                grid-template-columns: repeat(2, 1fr);
+                gap: 8px;
+            }
+
+            .sidebar li {
+                margin-bottom: 0;
+            }
+
+            .header h1 {
+                font-size: 22px;
+            }
+
+            .section-title {
+                font-size: 16px;
+            }
+
+            .summary {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .actions {
+                flex-direction: column;
+            }
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: 10px;
+            }
+
+            .header {
+                padding: 20px 15px;
+            }
+
+            .header h1 {
+                font-size: 20px;
+            }
+
+            .content {
+                padding: 15px;
+                gap: 15px;
+            }
+
+            .sidebar {
+                padding: 15px;
+            }
+
+            .sidebar ul {
+                grid-template-columns: 1fr;
+            }
+
+            .summary {
+                grid-template-columns: 1fr;
+            }
+
+            .item {
+                padding: 12px 14px;
+            }
+
+            .summary-card .number {
+                font-size: 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📋 Checking de Actividades</h1>
+            <p>Gestiona y realiza seguimiento de todas tus actividades</p>
+        </div>
+
+        <div class="content">
+            <div class="sidebar">
+                <h3>Categorías</h3>
+                <ul id="categories"></ul>
+            </div>
+
+            <div class="main-content">
+                <div id="sectionContent"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const data = {
+            'Documentos': ['Planif EV', 'Planif Didac', 'Program Didac'],
+            'Soluciones/Contenidos EV': ['EV nivel con-sin', 'EV intermedia con-sin', 'EV final con-sin'],
+            'Ajustes comunes EV': ['EV0', 'EV1', 'EV2'],
+            'Ajustes comunes MOD': ['M1', 'M2', 'M3'],
+            'Otras comprobaciones': ['Links (material complementario)', 'PDF - Recibi material', 'PDF - Bienvenida', 'Calendario plataforma', 'Restricciones', 'SCORM'],
+            'Mensajes 1er día': ['Foro presentación', 'Tablón de anuncios', 'Comunicación con el tutor']
+        };
+
+        let checkedItems = {};
+        let currentSection = null;
+
+        // Inicializar
+        function init() {
+            loadCheckedItems();
+            renderCategories();
+            const firstCategory = Object.keys(data)[0];
+            selectCategory(firstCategory);
+        }
+
+        // Cargar items guardados
+        function loadCheckedItems() {
+            const saved = localStorage.getItem('checkingItems');
+            if (saved) {
+                checkedItems = JSON.parse(saved);
+            } else {
+                Object.keys(data).forEach(category => {
+                    checkedItems[category] = {};
+                    data[category].forEach(item => {
+                        checkedItems[category][item] = false;
+                    });
+                });
+            }
+        }
+
+        // Guardar items
+        function saveCheckedItems() {
+            localStorage.setItem('checkingItems', JSON.stringify(checkedItems));
+        }
+
+        // Renderizar categorías
+        function renderCategories() {
+            const categoriesDiv = document.getElementById('categories');
+            categoriesDiv.innerHTML = '';
+
+            Object.keys(data).forEach(category => {
+                const li = document.createElement('li');
+                const button = document.createElement('button');
+                button.textContent = category;
+                
+                // Verificar si la categoría está completa
+                if (isCategoryCompleted(category)) {
+                    button.classList.add('completed');
+                }
+                
+                button.onclick = () => selectCategory(category);
+                li.appendChild(button);
+                categoriesDiv.appendChild(li);
+            });
+        }
+
+        // Seleccionar categoría
+        function selectCategory(category) {
+            currentSection = category;
+            
+            // Actualizar botones activos
+            document.querySelectorAll('.sidebar button').forEach(btn => {
+                btn.classList.remove('active');
+                if (btn.textContent === category) {
+                    btn.classList.add('active');
+                }
+            });
+
+            renderContent(category);
+        }
+
+        // Renderizar contenido
+        function renderContent(category) {
+            const contentDiv = document.getElementById('sectionContent');
+            const items = data[category] || [];
+
+            let html = `<div class="section-title">${category}</div>`;
+            html += '<div class="items-list">';
+
+            items.forEach(item => {
+                const isChecked = checkedItems[category][item];
+                const checkedClass = isChecked ? 'completed' : '';
+                
+                html += `
+                    <div class="item ${checkedClass}">
+                        <input 
+                            type="checkbox" 
+                            id="${category}-${item}"
+                            ${isChecked ? 'checked' : ''}
+                            onchange="toggleItem('${category}', '${item}', this.checked)"
+                        >
+                        <label for="${category}-${item}">${item}</label>
+                        ${isChecked ? '<span class="status-badge">✓ Completado</span>' : ''}
+                    </div>
+                `;
+            });
+
+            html += '</div>';
+            html += '<div class="actions">';
+            html += `<button class="btn btn-reset" onclick="resetCategory('${category}')">Reiniciar</button>`;
+            html += '</div>';
+
+            contentDiv.innerHTML = html;
+        }
+
+        // Renderizar resumen
+        function renderSummary(category) {
+            const items = data[category] || [];
+            const completed = Object.values(checkedItems[category] || {}).filter(v => v).length;
+            const total = items.length;
+            const percentage = total > 0 ? Math.round((completed / total) * 100) : 0;
+
+            return `
+                <div class="summary">
+                    <div class="summary-card">
+                        <h4>Total</h4>
+                        <div class="number">${total}</div>
+                    </div>
+                    <div class="summary-card">
+                        <h4>Completados</h4>
+                        <div class="number">${completed}</div>
+                        <div class="percentage">${percentage}%</div>
+                    </div>
+                    <div class="summary-card">
+                        <h4>Pendientes</h4>
+                        <div class="number">${total - completed}</div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Toggle item
+        function toggleItem(category, item, isChecked) {
+            checkedItems[category][item] = isChecked;
+            saveCheckedItems();
+            renderContent(category);
+            renderCategories(); // Actualizar estado del botón
+        }
+
+        // Verificar si una categoría está completada
+        function isCategoryCompleted(category) {
+            const items = data[category] || [];
+            if (items.length === 0) return false;
+            return items.every(item => checkedItems[category][item]);
+        }
+
+        // Reiniciar categoría
+        function resetCategory(category) {
+            if (confirm(`¿Deseas reiniciar todos los items de ${category}?`)) {
+                Object.keys(checkedItems[category]).forEach(item => {
+                    checkedItems[category][item] = false;
+                });
+                saveCheckedItems();
+                renderContent(category);
+                renderCategories(); // Actualizar estado del botón
+            }
+        }
+
+        // Exportar datos
+        function exportData() {
+            let exportText = 'REPORTE DE CHECKING DE ACTIVIDADES\n';
+            exportText += '='.repeat(50) + '\n\n';
+            exportText += new Date().toLocaleString() + '\n\n';
+
+            Object.keys(data).forEach(category => {
+                const items = data[category];
+                const completed = Object.values(checkedItems[category] || {}).filter(v => v).length;
+                const total = items.length;
+                const percentage = total > 0 ? Math.round((completed / total) * 100) : 0;
+
+                exportText += `\n${category}\n`;
+                exportText += '-'.repeat(40) + '\n';
+                exportText += `Completados: ${completed}/${total} (${percentage}%)\n\n`;
+
+                items.forEach(item => {
+                    const isChecked = checkedItems[category][item];
+                    exportText += `  [${isChecked ? '✓' : ' '}] ${item}\n`;
+                });
+
+                exportText += '\n';
+            });
+
+            const blob = new Blob([exportText], { type: 'text/plain' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `checking-actividades-${new Date().getTime()}.txt`;
+            a.click();
+            window.URL.revokeObjectURL(url);
+        }
+
+        // Iniciar aplicación
+        init();
+    </script>
+</body>
+</html>
