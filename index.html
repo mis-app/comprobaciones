@@ -35,7 +35,7 @@
         }
 
         .header h1 {
-            font-size: 28px;
+            font-size: 40px;
             margin-bottom: 8px;
             font-weight: 600;
         }
@@ -331,18 +331,21 @@
                 font-size: 24px;
             }
         }
+        .atribucion{
+            color: white;
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="header">
             <h1>📋 Checking de Actividades</h1>
-            <p>Gestiona y realiza seguimiento de todas tus actividades</p>
+            <p>Gestiona y realiza comprobaciones de inicio de curso</p>
         </div>
 
         <div class="content">
             <div class="sidebar">
-                <h3>Categorías</h3>
+                <h3>Comprobaciones</h3>
                 <ul id="categories"></ul>
             </div>
 
@@ -350,12 +353,15 @@
                 <div id="sectionContent"></div>
             </div>
         </div>
+        
     </div>
-
+<div>
+            <p class="atribucion">diesño & dev: Juan Garde</p>
+        </div>
     <script>
         const data = {
-            'Documentos': ['Planif EV', 'Planif Didac', 'Program Didac'],
-            'Soluciones/Contenidos EV': ['EV nivel con-sin', 'EV intermedia con-sin', 'EV final con-sin'],
+            'Documentos': ['Planificación de la evaluación', 'Planificación didáctica', 'Programación didáctica'],
+            'Soluciones/Contenidos EV': ['EV NIVEL con y sin soluciones', 'EV INTERMEDIA con y sin soluciones', 'EV FINAL con y sin soluciones'],
             'Ajustes comunes EV': ['EV0', 'EV1', 'EV2'],
             'Ajustes comunes MOD': ['M1', 'M2', 'M3'],
             'Otras comprobaciones': ['Links (material complementario)', 'PDF - Recibi material', 'PDF - Bienvenida', 'Calendario plataforma', 'Restricciones', 'SCORM'],
