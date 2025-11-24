@@ -183,6 +183,18 @@
             display: inline-block;
         }
 
+        .sidebar button.in-progress {
+            background: #fff3cd;
+            color: #856404;
+            border-color: #ffc107;
+            font-weight: 600;
+        }
+
+        .sidebar button.in-progress:hover {
+            background: #ffc107;
+            color: white;
+        }
+
         .sidebar button.completed {
             background: #e7f5e7;
             color: #28a745;
@@ -394,6 +406,8 @@
                 // Verificar si la categoría está completa
                 if (isCategoryCompleted(category)) {
                     button.classList.add('completed');
+                } else if (isCategoryInProgress(category)) {
+                    button.classList.add('in-progress');
                 }
                 
                 button.onclick = () => selectCategory(category);
@@ -490,6 +504,14 @@
             const items = data[category] || [];
             if (items.length === 0) return false;
             return items.every(item => checkedItems[category][item]);
+        }
+
+        // Verificar si una categoría está en progreso (desde el primer item hasta el penúltimo)
+        function isCategoryInProgress(category) {
+            const items = data[category] || [];
+            if (items.length <= 1) return false;
+            const checkedCount = items.filter(item => checkedItems[category][item]).length;
+            return checkedCount > 0 && checkedCount < items.length;
         }
 
         // Reiniciar categoría
